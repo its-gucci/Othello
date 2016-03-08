@@ -178,3 +178,31 @@ void Board::setBoard(char data[]) {
         }
     }
 }
+
+int Board::value(Side side) {
+    int cost[8][8] = 
+    {
+        {99, -8, 8, 6, 6, 8, -8, 99},
+        {-8, -24, -4, -3, -3, -4, -24, -8},
+        {8, -4, 7, 4, 4, 7, -4, 8},
+        {6, -3, 4, 0, 0, 4, -3, 6},
+        {6, -3, 4, 0, 0, 4, -3, 6},
+        {8, -4, 7, 4, 4, 7, -4, 8},
+        {-8, -24, -4, -3, -3, -4, -24, -8},
+        {99, -8, 8, 6, 6, 8, -8, 99}
+    };
+    int value = 0;
+    for (int i = 0; i < 8; i++){
+        for (int j = 0; j < 8; j++){
+            if (occupied(i, j)){
+                if (get(side, i, j)){
+                    value = value + cost[i][j];
+                }
+                else {
+                    value = value - cost[i][j];
+                }
+            }
+        }
+    }
+    return value;
+}

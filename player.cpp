@@ -14,6 +14,8 @@ Player::Player(Side side) {
      * precalculating things, etc.) However, remember that you will only have
      * 30 seconds.
      */
+     Board player_board;
+     this->this_side = side;
 }
 
 /*
@@ -38,6 +40,39 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     /* 
      * TODO: Implement how moves your AI should play here. You should first
      * process the opponent's opponents move before calculating your own move
-     */ 
-    return NULL;
+     */
+    Side other;
+    if (this_side == WHITE){
+        other = BLACK;
+    }
+    else if (this_side == BLACK){
+        other = WHITE;
+    }
+    int the_move[2];
+    int cost = -99 * 64;
+    player_board.doMove(opponentsMove, other);
+    if (not player_board.hasMoves(this_side)){
+        return NULL;
+    }
+    else {
+        int heuristic = player_board.value(this_side);
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++){
+                Board * new_board = player_board.copy();
+                Move * our_move = new Move(i, j);
+                if (new_board->checkMove(our_move, this_side)){
+                    new_board->doMove(our_move, this_side);
+                    if (new_board->value(this_side) - heuristic > cost){
+                        the_move[0] = i;
+                        the_move[1] = j;
+                    }
+                }
+                delete our_move;
+                delete new_board;
+            }
+        }
+    }
+    Move * new_move = new Move(the_move[0], the_move[1]);
+    player_board.doMove(new_move, this_side);
+    return new_move;
 }

@@ -10,6 +10,8 @@ class Player {
 
 public:
     Player(Side side);
+    Board player_board;
+    Side this_side;
     ~Player();
     
     Move *doMove(Move *opponentsMove, int msLeft);
